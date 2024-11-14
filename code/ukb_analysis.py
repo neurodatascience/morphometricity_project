@@ -2,7 +2,8 @@
 # analyzing the ukb data for 7 traits
 import numpy as np
 from numpy import linalg
-from numpy._core.numeric import identity
+# from numpy._core.numeric import identity
+from numpy.core.numeric import identity
 import pandas as pd
 import csv
 import itertools

@@ -6,7 +6,8 @@
 # libraries
 import numpy as np
 #from numpy import linalg
-from numpy._core.numeric import identity
+#from numpy._core.numeric import identity
+from numpy.core.numeric import identity
 from numpy import linalg
 import pandas as pd
 
