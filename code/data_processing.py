@@ -2,7 +2,7 @@
 
 import numpy as np
 from numpy import linalg
-from numpy.core.numeric import Inf, identity
+from numpy._core.numeric import identity
 import pandas as pd
 import csv
 import itertools
@@ -38,7 +38,6 @@ filtered_id = field_id.loc[rows]["Field ID"].apply(str)
 # JB: str is undefined ? 
 
 # %%
-#iter_csv = pd.read_csv('ukb46307_demographics.csv', iterator=True, chunksize=10000,error_bad_lines=False)
 iter_csv = pd.read_csv('ukb46307_demographics.csv', iterator=True, chunksize=10000,on_bad_lines='error')
 data_demographics = pd.concat ([chunk.dropna(how='all') for chunk in iter_csv] )
 data_demographics.shape #502462 subjects, 11 measurements
@@ -46,6 +45,7 @@ data_demographics.shape #502462 subjects, 11 measurements
 data_demographics = data_demographics[['eid','age_at_recruitment', 'sex']]
 # %%
 merge_data = data.merge(right = data_demographics, how="inner", on="eid")
+merge_data.shape
 # JB : len(merge_data) : 502462
 
 # %%
@@ -63,6 +63,9 @@ column_codes = {
 
 phenotype = pd.read_csv("current.csv", usecols=column_codes.keys())
 phenotype = phenotype.dropna(axis=0, how="all")
+phenotype.shape
+# 6801 subjects in the phenotype data
+
 # %%
 merge_data2 = merge_data.merge(right=phenotype, how="inner", on="eid")
 merge_data2.shape
@@ -94,11 +97,12 @@ instance3_dat.drop(columns=col_to_drop, axis=1)
 instance2_dat.dropna(axis = 0, how = "all", inplace=True)
 instance3_dat.dropna(axis = 0, how = "all", inplace=True)
 
+# Consider only complete cases, each instances have 6801 subjects with 132 features (including morphological measurs and phenotypes)
 print(instance2_dat.shape, instance3_dat.shape)
 # Consider only complete cases, each instances have 43107 subjects with 62
 # JB: why the print is returning:  
-       #:  print(instance2_dat.shape, instance3_dat.shape) 
-       #: (6801, 132) (6801, 132)
+#:  print(instance2_dat.shape, instance3_dat.shape) 
+#: (6801, 132) (6801, 132)
 
 # %%
 # Take a subset of instance2 first
