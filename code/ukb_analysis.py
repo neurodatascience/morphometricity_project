@@ -7,6 +7,7 @@ from numpy.core.numeric import identity
 import pandas as pd
 import csv
 import itertools
+import os
 #import statsmodels.regression.mixed_linear_model as sm
 
 import matplotlib.pyplot as plt
@@ -16,14 +17,16 @@ import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
 import morphometricity
 
-os.chdir('/Users/tingzhang/Documents/GitHub/morphometricity/data')
+#DATADIR = '/Users/tingzhang/Documents/GitHub/morphometricity/data'
+DATADIR = '/home/jb/data/irene-phd/ukb-data'
+os.chdir(DATADIR)
 
 data = pd.read_csv("ses2.csv")
 
-
+# not used, to remember the code
 column_codes = {
     "eid":"eid",
-    "21003-2.0": "age_at_ses2",
+    "21003-2.0":"age_at_ses2",
     "20191-0.0":"fluid intelligence",
     "20544-0.2":"scz",
     "20544-0.12":"autism",
@@ -34,9 +37,9 @@ column_codes = {
 # age at recruitement
 age_data = data.drop(columns=['eid','20191-0.0', '20544-0.2', '20544-0.12','20544-0.14','21003-2.0'])
 age_data = age_data.dropna(axis=0, how="any")
+# reduced sample size because takes only complete data
 age_data.shape
-
-
+assert(age_data.shape==(627,125))
 
 # y for phenotype: age at recruitment, 
 # x for covariates sex (other analyses will include age) 
@@ -182,6 +185,7 @@ Y4 = [age_res[3][0], age_ses2_res[3][0],IQ_res[3][0], scz_res[3][0]]
 Y5 = [0.89, 0.89, 0.15, 0.71]  
 
 # Y0 are the reported estimated morphometricity from Sabuncu et al.
+# Y1-Y4 : the four estimated morphometricity with our 4 kernels
 # Y5 are the highest prediction R2 from the most recent study (from MRI data, not just morphological measures)
 # age:     Irene Cumplido-Mayoral 2022 (UKB)
 # fluid intelligence:       Bruno HeblingVieira 2022 (systematic review)
